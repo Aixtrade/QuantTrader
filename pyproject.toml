@@ -1,0 +1,37 @@
+[project]
+name = "quanttrader"
+description = "Quant trading engine toolkit"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "ccxt>=4.5.34",
+    "httpx>=0.28.1",
+    "numpy>=2.4.1",
+    "pydantic>=2.12.5",
+    "ta-lib>=0.6.8",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+    "setuptools-scm>=8.1",
+]
+
+[build-system]
+requires = ["setuptools>=69", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["quanttrader"]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "node-and-date"
+write_to = "quanttrader/_version.py"
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=1.3.0",
+]
