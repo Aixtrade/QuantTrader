@@ -12,7 +12,7 @@ from macd_strategy import MACDConfig, MACDStrategy
 
 async def main() -> None:
     macd_config = MACDConfig(
-        timeframe="1h",
+        timeframe="5m",
         require_histogram_confirm=False,
     )
     strategy = MACDStrategy(config=macd_config)
@@ -30,57 +30,41 @@ async def main() -> None:
 
     config = BacktestConfig(
         symbol="BTC/USDT",
-        interval="1h",
+        interval="1m",
         initial_capital=10000.0,
         start_time=start_time,
         end_time=end_time,
     )
 
     indicator_id = f"macd_{macd_config.timeframe}"
-    bar_index = 0
     warmed_up = False
 
     local_tz = datetime.now().astimezone().tzinfo
 
+    signal_count = 0
+    latest_macd = {}  # 保存最新的 MACD 指标值
+
     async for event in engine.run(strategy, config):
         if event.event_type == "tick":
-            bar_index += 1
-            bar = event.data.get("bar", {})
             indicators = event.data.get("incremental_indicators", {})
-            macd_payload = indicators.get("macd", {}).get(indicator_id, {})
             timeframe_state = indicators.get("by_timeframe", {}).get(macd_config.timeframe, {})
             is_warmed_up = timeframe_state.get("is_warmed_up", indicators.get("is_warmed_up", False))
             warmed_up = is_warmed_up
-            if not is_warmed_up:
-                continue
-            bar_ts = bar.get("timestamp")
-            if (
-                isinstance(bar_ts, int)
-                and requested_start_time is not None
-                and requested_end_time is not None
-                and (bar_ts < requested_start_time or bar_ts > requested_end_time)
-            ):
-                continue
 
-            bar_time = None
-            if isinstance(bar_ts, int) and bar_ts > 0:
-                bar_time = datetime.fromtimestamp(bar_ts / 1000).astimezone(local_tz)
+            # 保存最新的 MACD 指标值
+            macd_data = indicators.get("macd", {}).get(indicator_id, {})
+            if macd_data:
+                latest_macd = macd_data
 
-            print(
-                " | ".join(
-                    [
-                        f"#{bar_index}",
-                        f"time={bar_time.isoformat() if bar_time else 'N/A'}",
-                        f"close={bar.get('close')}",
-                        f"macd={macd_payload.get('macd')}",
-                        f"signal={macd_payload.get('signal_line')}",
-                        f"hist={macd_payload.get('histogram')}",
-                    ]
-                )
-            )
-        if event.event_type == "trade":
+        elif event.event_type == "trade":
             trade_bar = event.data.get("bar", {})
             trade_ts = trade_bar.get("timestamp")
+            records = event.data.get("records", [])
+
+            # 跳过无效信号（HOLD 等不产生交易记录的信号）
+            if not records:
+                continue
+
             if (
                 not warmed_up
                 or not isinstance(trade_ts, int)
@@ -88,10 +72,36 @@ async def main() -> None:
                 or trade_ts > requested_end_time
             ):
                 continue
-            trade = event.data.get("trade_result", {})
-            print(f"Trade: {trade}")
+
+            signal_count += 1
+            trade_result = event.data.get("trade_result", {})
+            trade_time = datetime.fromtimestamp(trade_ts / 1000).astimezone(local_tz)
+
+            # 从 records 获取交易动作
+            action = records[0].get("action", "N/A") if records else "N/A"
+            side = records[0].get("side", "") if records else ""
+            pnl = trade_result.get("pnl", 0.0)
+
+            # 格式化 MACD 指标值
+            macd_val = latest_macd.get("macd")
+            signal_val = latest_macd.get("signal_line")
+            hist_val = latest_macd.get("histogram")
+
+            macd_str = f"{macd_val:.4f}" if isinstance(macd_val, (int, float)) else "N/A"
+            signal_str = f"{signal_val:.4f}" if isinstance(signal_val, (int, float)) else "N/A"
+            hist_str = f"{hist_val:.4f}" if isinstance(hist_val, (int, float)) else "N/A"
+
+            print(
+                f"\nSignal #{signal_count} | {trade_time.strftime('%Y-%m-%d %H:%M')}\n"
+                f"   Action: {action} ({side})\n"
+                f"   Price: {trade_bar.get('close')}\n"
+                f"   PnL: {pnl:.2f}\n"
+                f"   MACD: {macd_str} | Signal: {signal_str} | Hist: {hist_str}"
+            )
+
         elif event.event_type == "complete":
-            print(f"Final balance: {event.data.get('final_balance')}")
+            print(f"\n{'='*50}")
+            print(f"回测完成 | 总信号数: {signal_count} | 最终余额: {event.data.get('final_balance')}")
 
 
 if __name__ == "__main__":

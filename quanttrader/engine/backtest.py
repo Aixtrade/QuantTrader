@@ -56,9 +56,24 @@ class BacktestEngine(BaseEngine):
         if data_requirements.use_time_range and start_time and end_time:
             interval_seconds = self._interval_seconds(config.interval)
             warmup_bars = max(data_requirements.min_bars, data_requirements.warmup_periods)
-            if strategy.get_indicator_requirements():
-                warmup_bars += 200
-            warmup_ms = warmup_bars * interval_seconds * 1000
+
+            # 计算指标预热所需的额外数据
+            indicator_requirements = strategy.get_indicator_requirements()
+            if indicator_requirements:
+                # 找出指标中最大的 timeframe，计算其预热所需时间
+                max_indicator_warmup_ms = 0
+                for req in indicator_requirements.values():
+                    ind_timeframe = req.get("timeframe", config.interval)
+                    ind_tf_seconds = self._interval_seconds(ind_timeframe)
+                    # 预热需要约 200 根目标 timeframe 的 K 线
+                    ind_warmup_ms = 200 * ind_tf_seconds * 1000
+                    max_indicator_warmup_ms = max(max_indicator_warmup_ms, ind_warmup_ms)
+
+                # 使用基于指标 timeframe 的预热时间
+                warmup_ms = max_indicator_warmup_ms
+            else:
+                warmup_ms = warmup_bars * interval_seconds * 1000
+
             extra_ms = data_requirements.extra_seconds * 1000
             start_time = max(0, start_time - warmup_ms - extra_ms)
             total_ms = max(0, end_time - start_time)
@@ -81,7 +96,10 @@ class BacktestEngine(BaseEngine):
         indicator_engine: Optional[IndicatorEngine] = None
         if indicator_requirements:
             indicator_engine = IndicatorEngine()
-            indicator_engine.register_requirements(indicator_requirements)
+            indicator_engine.register_requirements(
+                indicator_requirements,
+                source_timeframe=config.interval,
+            )
 
         # 初始化账户和交易器
         if config.contract_type == "events":
