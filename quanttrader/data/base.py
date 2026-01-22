@@ -190,7 +190,7 @@ class DataCenterService:
             }
         }
         """
-        symbol = ExchangeAdapter.normalize_symbol(request.symbol)
+        symbol = ExchangeAdapter.normalize_symbol(request.symbol, self.market_type)
 
         # 尝试从缓存获取
         if self._cache:
@@ -291,7 +291,7 @@ class DataCenterService:
 
     async def get_ticker(self, symbol: str) -> Dict[str, Any]:
         """获取最新行情"""
-        symbol = ExchangeAdapter.normalize_symbol(symbol)
+        symbol = ExchangeAdapter.normalize_symbol(symbol, self.market_type)
 
         # 尝试从缓存获取
         if self._cache:
@@ -329,7 +329,7 @@ class DataCenterService:
         self, symbol: str, limit: int = 20
     ) -> Dict[str, Any]:
         """获取订单簿"""
-        symbol = ExchangeAdapter.normalize_symbol(symbol)
+        symbol = ExchangeAdapter.normalize_symbol(symbol, self.market_type)
 
         if self._cache:
             cached = self._cache.get_orderbook(symbol)

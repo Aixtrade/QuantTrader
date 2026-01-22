@@ -19,6 +19,7 @@ from quanttrader.traders.events import EventsBacktestConfig, EventsTrader
 class BacktestConfig(ExecutionConfig):
     initial_capital: float = 10000.0
     contract_type: str = "futures"  # futures | events (events 使用 UP/DOWN/HOLD)
+    enable_cache: bool = True
 
 
 class BacktestEngine(BaseEngine):
@@ -81,16 +82,21 @@ class BacktestEngine(BaseEngine):
             request_limit = max(request_limit, required_bars)
 
         # 加载数据（MVP：占位空数据）
-        async with DataCenterService(market_type=market_type) as data_service:
-            market = await data_service.get_market_data(
-                MarketDataRequest(
-                    symbol=config.symbol,
-                    interval=config.interval,
-                    limit=request_limit,
-                    start_time=start_time,
-                    end_time=end_time,
-                )
+        async with DataCenterService(
+            market_type=market_type,
+            enable_cache=config.enable_cache,
+        ) as data_service:
+            request = MarketDataRequest(
+                symbol=config.symbol,
+                interval=config.interval,
+                limit=request_limit,
+                start_time=start_time,
+                end_time=end_time,
             )
+            if start_time and end_time and request_limit > 1000:
+                market = await data_service.get_historical_klines_batch(request)
+            else:
+                market = await data_service.get_market_data(request)
 
         indicator_requirements = strategy.get_indicator_requirements()
         indicator_engine: Optional[IndicatorEngine] = None
