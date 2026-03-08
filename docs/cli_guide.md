@@ -10,7 +10,7 @@ pip install xqtrader
 pip install "xqtrader[cli]"
 
 # 开发模式（从源码）
-uv sync --dev
+uv sync --group dev
 ```
 
 > **注意**：zsh 用户必须用引号包裹 `"xqtrader[cli]"`，否则 `[]` 会被解释为 glob 语法。

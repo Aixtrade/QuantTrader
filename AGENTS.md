@@ -28,10 +28,10 @@ Entry points
 Required environment
 - Python >= 3.11 (见 `pyproject.toml`)。
 - 依赖管理: `uv`。
-- 可选开发依赖在 `project.optional-dependencies.dev`。
+- 开发依赖在 `dependency-groups.dev`。
 
 Build, lint, test commands
-- 安装依赖: `uv sync --dev`。
+- 安装依赖: `uv sync --group dev`。
 - 运行全部测试: `uv run pytest`。
 - 运行单测文件: `uv run pytest tests/test_data_center.py -v`。
 - 运行单测用例: `uv run pytest tests/test_data_center.py -k test_kline_cache -v`。

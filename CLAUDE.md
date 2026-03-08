@@ -10,7 +10,7 @@ XQTrader 是一个量化交易引擎工具包，支持策略开发、回测、�
 
 ```bash
 # 安装依赖（使用 uv）
-uv sync --dev
+uv sync --group dev
 
 # 运行测试
 uv run pytest

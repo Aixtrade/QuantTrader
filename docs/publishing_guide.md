@@ -8,8 +8,8 @@
   - `packages = ["xqtrader"]` 或自动发现；如有 CLI，配置 `[project.scripts]`。
   - Python 版本下限：`requires-python = ">=3.10"`（按需要调整）。
 - 依赖管理
-  - 运行时依赖放 `dependencies`；开发/测试工具放 `optional-dependencies`（如 `dev`，包含 `pytest`, `setuptools-scm`）。
-  - 使用 `uv lock` 固定版本，`uv sync --extra dev` 安装开发集。
+  - 运行时依赖放 `dependencies`；开发/测试工具放 `dependency-groups`（如 `dev`，包含 `pytest`, `setuptools-scm`）。
+  - 使用 `uv lock` 固定版本，`uv sync --group dev` 安装开发集。
 - 版本来源（已选方案：`setuptools-scm`）
   - 在 `pyproject.toml` 声明 `[build-system]` 使用 `setuptools` 与 `setuptools-scm`；`[tool.setuptools_scm]` 控制版本写入 `xqtrader/_version.py`。
   - 版本由 git tag `vX.Y.Z` 推导；无 tag 时使用后缀（node-and-date）。
@@ -47,13 +47,13 @@
 
 ## 5. 常用命令速查
 - 安装（用户）：`uv add xqtrader` 或 `pip install xqtrader`。
-- 开发安装：`uv sync --extra dev`。
+- 开发安装：`uv sync --group dev`。
 - 运行示例：`uv run python examples/simple_backtest.py`。
 - 构建：`uv build`。
 - 发布：`uv publish`（或 `twine upload dist/*`）。
 
 ## 6. CI 对齐
-- `.github/workflows/ci.yml`：checkout → setup-python → 安装 uv → `uv sync --extra dev` → `uv run pytest` → `uv build`。
+- `.github/workflows/ci.yml`：checkout → setup-python → 安装 uv → `uv sync --group dev` → `uv run pytest` → `uv build`。
 
 ## 7. 安全与合规提醒
 - 不要在仓库中提交 API Key/Secrets；使用环境变量或秘密管理服务注入。

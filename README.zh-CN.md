@@ -55,7 +55,7 @@ git clone https://github.com/Aixtrade/QuantTrader.git
 cd XQTrader
 
 # 使用 uv 安装依赖
-uv sync --dev
+uv sync --group dev
 
 # 或使用 pip
 pip install -e ".[dev]"

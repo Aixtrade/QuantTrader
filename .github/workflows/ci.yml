@@ -16,8 +16,8 @@ jobs:
           python-version: '3.12'
       - name: Install uv
         run: pip install uv
-      - name: Sync deps (dev extras)
-        run: uv sync --extra dev
+      - name: Sync deps (dev group)
+        run: uv sync --group dev
       - name: Run tests
         run: uv run pytest
       - name: Build
