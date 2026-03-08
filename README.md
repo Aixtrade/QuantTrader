@@ -1,6 +1,6 @@
 # QuantTrader
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [中文文档](README.zh-CN.md)
@@ -25,14 +25,33 @@ A quantitative trading engine toolkit for strategy development, backtesting, pap
 
 ### Requirements
 
-- Python >= 3.11
+- Python >= 3.12
 - [uv](https://github.com/astral-sh/uv) (recommended) or pip
 
-### Install
+### Use as a dependency
+
+Add QuantTrader to your project with uv:
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/QuantTrader.git
+uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+```
+
+Or pin to a specific version tag:
+
+```bash
+uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
+```
+
+Or with pip:
+
+```bash
+pip install "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+```
+
+### Development install
+
+```bash
+git clone https://github.com/Aixtrade/QuantTrader.git
 cd QuantTrader
 
 # Install dependencies with uv

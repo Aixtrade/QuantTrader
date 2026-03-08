@@ -1,6 +1,6 @@
 # QuantTrader
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [English](README.md)
@@ -25,14 +25,33 @@
 
 ### 环境要求
 
-- Python >= 3.11
+- Python >= 3.12
 - [uv](https://github.com/astral-sh/uv) (推荐) 或 pip
 
-### 安装步骤
+### 作为依赖引用
+
+使用 uv 添加到你的项目：
 
 ```bash
-# 克隆仓库
-git clone https://github.com/yourusername/QuantTrader.git
+uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+```
+
+锁定到特定版本 tag：
+
+```bash
+uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
+```
+
+或使用 pip：
+
+```bash
+pip install "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+```
+
+### 开发安装
+
+```bash
+git clone https://github.com/Aixtrade/QuantTrader.git
 cd QuantTrader
 
 # 使用 uv 安装依赖

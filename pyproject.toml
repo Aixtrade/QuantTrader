@@ -2,7 +2,7 @@
 name = "quanttrader"
 description = "Quant trading engine toolkit"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "ccxt>=4.5.34",
     "httpx>=0.28.1",
@@ -23,8 +23,9 @@ dev = [
 requires = ["setuptools>=69", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["quanttrader"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["quanttrader*"]
 
 [tool.setuptools_scm]
 version_scheme = "post-release"
