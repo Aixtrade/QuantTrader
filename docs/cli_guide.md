@@ -3,8 +3,11 @@
 ## 安装
 
 ```bash
-# 基础安装（CLI 命令行）
+# 仅核心库（用于在代码中导入使用）
 pip install xqtrader
+
+# 核心库 + CLI 命令行工具
+pip install xqtrader[cli]
 
 # 开发模式（从源码）
 uv sync --dev
