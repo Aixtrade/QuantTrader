@@ -3,10 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Tuple
 
-from quanttrader.accounts.base import BaseAccount, TradeResult
-from quanttrader.accounts.futures import FuturesSimulatedAccount, PositionSide
-from quanttrader.traders.base import BaseTrader
-from quanttrader.strategies.base import StrategySignal
+from xqtrader.accounts.base import BaseAccount, TradeResult
+from xqtrader.accounts.futures import FuturesSimulatedAccount, PositionSide
+from xqtrader.traders.base import BaseTrader
+from xqtrader.strategies.base import StrategySignal
 
 
 @dataclass

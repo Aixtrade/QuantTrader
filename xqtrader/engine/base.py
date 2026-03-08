@@ -6,7 +6,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, AsyncGenerator, Dict, Optional
 
-from quanttrader.strategies.base import BaseStrategy, StrategyContext, StrategyResult
+from xqtrader.strategies.base import BaseStrategy, StrategyContext, StrategyResult
 
 
 class ExecutionMode(str, Enum):

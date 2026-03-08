@@ -94,9 +94,9 @@ async def _run_backtest(
 ) -> None:
     from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 
-    from quanttrader.engine.backtest import BacktestConfig, BacktestEngine
-    from quanttrader.reports.base import ReportCollector, ReportGenerator
-    from quanttrader.strategies.base import StrategyLoader
+    from xqtrader.engine.backtest import BacktestConfig, BacktestEngine
+    from xqtrader.reports.base import ReportCollector, ReportGenerator
+    from xqtrader.strategies.base import StrategyLoader
 
     # 加载策略
     loader = StrategyLoader(str(Path(strategy_path).parent))

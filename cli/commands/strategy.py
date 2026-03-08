@@ -26,7 +26,7 @@ def list_strategies(dir: str) -> None:
     """列出目录下的策略文件"""
     from rich.table import Table
 
-    from quanttrader.strategies.base import StrategyLoader
+    from xqtrader.strategies.base import StrategyLoader
 
     loader = StrategyLoader(dir)
     skipped = []
@@ -66,7 +66,7 @@ def list_strategies(dir: str) -> None:
 @click.argument("file_path", type=click.Path(exists=True, dir_okay=False))
 def validate_strategy(file_path: str) -> None:
     """校验策略文件是否可加载"""
-    from quanttrader.strategies.base import StrategyLoader
+    from xqtrader.strategies.base import StrategyLoader
 
     loader = StrategyLoader(str(Path(file_path).parent))
     instance = loader.load_strategy_from_file(file_path)
@@ -81,7 +81,7 @@ def validate_strategy(file_path: str) -> None:
     console.print(f"  描述: {instance.description or '(无)'}")
 
     # 检查 execute 方法
-    from quanttrader.strategies.base import BaseStrategy
+    from xqtrader.strategies.base import BaseStrategy
     if hasattr(instance, "execute") and callable(instance.execute):
         console.print(f"  execute: [green]已实现[/green]")
     else:
@@ -104,7 +104,7 @@ def new_strategy(name: str, output: str | None) -> None:
 
 from __future__ import annotations
 
-from quanttrader.strategies.base import BaseStrategy, StrategyContext, StrategyResult
+from xqtrader.strategies.base import BaseStrategy, StrategyContext, StrategyResult
 
 
 class {class_name}(BaseStrategy):

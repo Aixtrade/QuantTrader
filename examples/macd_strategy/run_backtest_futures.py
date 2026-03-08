@@ -6,8 +6,8 @@ import asyncio
 
 from datetime import datetime, timedelta, timezone
 
-from quanttrader.engine.backtest import BacktestConfig, BacktestEngine
-from quanttrader.reports.base import ReportCollector, ReportGenerator
+from xqtrader.engine.backtest import BacktestConfig, BacktestEngine
+from xqtrader.reports.base import ReportCollector, ReportGenerator
 from macd_strategy import MACDConfig, MACDStrategy
 
 

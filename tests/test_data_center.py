@@ -9,9 +9,9 @@ import asyncio
 import time
 import pytest
 
-from quanttrader.data.cache import LRUCache, DataCenterCache
-from quanttrader.data.circuit_breaker import CircuitBreaker, CircuitState, CircuitBreakerOpenError
-from quanttrader.data.adapters.base import ExchangeAdapter, OHLCVData
+from xqtrader.data.cache import LRUCache, DataCenterCache
+from xqtrader.data.circuit_breaker import CircuitBreaker, CircuitState, CircuitBreakerOpenError
+from xqtrader.data.adapters.base import ExchangeAdapter, OHLCVData
 
 
 class TestLRUCache:
@@ -218,8 +218,8 @@ class TestOHLCVData:
 @pytest.mark.skip(reason="需要网络连接，手动运行")
 async def test_binance_adapter_fetch_ohlcv():
     """测试 Binance 适配器获取 K 线（需要网络）"""
-    from quanttrader.data.adapters.binance import BinanceAdapter
-    from quanttrader.data.adapters.base import MarketType
+    from xqtrader.data.adapters.binance import BinanceAdapter
+    from xqtrader.data.adapters.base import MarketType
 
     async with BinanceAdapter(MarketType.SPOT) as adapter:
         ohlcv = await adapter.fetch_ohlcv("BTC/USDT", "1h", limit=10)
@@ -231,8 +231,8 @@ async def test_binance_adapter_fetch_ohlcv():
 @pytest.mark.skip(reason="需要网络连接，手动运行")
 async def test_binance_futures_adapter():
     """测试 Binance 永续合约适配器（需要网络）"""
-    from quanttrader.data.adapters.binance import BinanceAdapter
-    from quanttrader.data.adapters.base import MarketType
+    from xqtrader.data.adapters.binance import BinanceAdapter
+    from xqtrader.data.adapters.base import MarketType
 
     async with BinanceAdapter(MarketType.FUTURES) as adapter:
         ohlcv = await adapter.fetch_ohlcv("BTC/USDT", "1h", limit=10)
@@ -246,7 +246,7 @@ async def test_binance_futures_adapter():
 @pytest.mark.skip(reason="需要网络连接，手动运行")
 async def test_data_center_service():
     """测试数据中心服务（需要网络）"""
-    from quanttrader.data import DataCenterService, MarketDataRequest, MarketType
+    from xqtrader.data import DataCenterService, MarketDataRequest, MarketType
 
     async with DataCenterService(market_type=MarketType.SPOT) as dc:
         data = await dc.get_market_data(

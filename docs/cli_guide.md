@@ -1,10 +1,10 @@
-# QuantTrader CLI 使用指南
+# XQTrader CLI 使用指南
 
 ## 安装
 
 ```bash
 # 基础安装（CLI 命令行）
-pip install quanttrader
+pip install xqtrader
 
 # 开发模式（从源码）
 uv sync --dev
@@ -12,37 +12,37 @@ uv sync --dev
 
 安装后提供两个等价命令：
 
-- `quanttrader` — 完整命令名
-- `qtrader` — 简写别名
+- `xqtrader` — 完整命令名
+- `xqt` — 简写别名
 
-开发模式下使用 `uv run quanttrader` 或 `uv run qtrader`。
+开发模式下使用 `uv run xqtrader` 或 `uv run xqt`。
 
 ## 全局选项
 
 ```bash
-quanttrader --version    # 显示版本号
-quanttrader --help       # 显示帮助信息
+xqtrader --version    # 显示版本号
+xqtrader --help       # 显示帮助信息
 ```
 
 ## 命令概览
 
 | 命令 | 说明 |
 |------|------|
-| `quanttrader backtest` | 运行策略回测 |
-| `quanttrader strategy list` | 列出目录下的策略 |
-| `quanttrader strategy new` | 生成策略模板文件 |
-| `quanttrader strategy validate` | 校验策略文件 |
+| `xqtrader backtest` | 运行策略回测 |
+| `xqtrader strategy list` | 列出目录下的策略 |
+| `xqtrader strategy new` | 生成策略模板文件 |
+| `xqtrader strategy validate` | 校验策略文件 |
 
 ---
 
-## quanttrader backtest
+## xqtrader backtest
 
 运行策略回测，自动生成报告。
 
 ### 用法
 
 ```bash
-quanttrader backtest [OPTIONS]
+xqtrader backtest [OPTIONS]
 ```
 
 ### 参数
@@ -72,14 +72,14 @@ quanttrader backtest [OPTIONS]
 
 ```bash
 # 基础回测
-quanttrader backtest \
+xqtrader backtest \
   -s examples/macd_strategy/macd_strategy.py \
   --symbol BTC/USDT \
   --start 2025-01-01 \
   --end 2025-03-01
 
 # 指定资金、周期、合约类型
-quanttrader backtest \
+xqtrader backtest \
   -s my_strategy.py \
   --symbol ETH/USDT \
   -i 5m \
@@ -89,7 +89,7 @@ quanttrader backtest \
   --contract futures
 
 # 详细模式 + 自定义报告路径
-quanttrader backtest \
+xqtrader backtest \
   -s my_strategy.py \
   --symbol BTC/USDT \
   --start 2025-01-01 \
@@ -98,7 +98,7 @@ quanttrader backtest \
   -r reports/btc_backtest.json
 
 # 禁用缓存（强制重新获取数据）
-quanttrader backtest \
+xqtrader backtest \
   -s my_strategy.py \
   --symbol BTC/USDT \
   --start 2025-03-01 \
@@ -122,16 +122,16 @@ quanttrader backtest \
 
 ---
 
-## quanttrader strategy
+## xqtrader strategy
 
 策略管理命令组。
 
-### quanttrader strategy list
+### xqtrader strategy list
 
 列出指定目录下的所有策略文件。
 
 ```bash
-quanttrader strategy list [OPTIONS]
+xqtrader strategy list [OPTIONS]
 ```
 
 | 参数 | 短写 | 默认值 | 说明 |
@@ -140,10 +140,10 @@ quanttrader strategy list [OPTIONS]
 
 ```bash
 # 列出当前目录的策略
-quanttrader strategy list
+xqtrader strategy list
 
 # 指定目录
-quanttrader strategy list -d examples/macd_strategy/
+xqtrader strategy list -d examples/macd_strategy/
 ```
 
 输出示例：
@@ -157,16 +157,16 @@ quanttrader strategy list -d examples/macd_strategy/
 └────────────────┴───────┴──────────────────┴──────────────────┘
 ```
 
-### quanttrader strategy validate
+### xqtrader strategy validate
 
 校验策略文件是否可正确加载。
 
 ```bash
-quanttrader strategy validate <FILE_PATH>
+xqtrader strategy validate <FILE_PATH>
 ```
 
 ```bash
-quanttrader strategy validate examples/macd_strategy/macd_strategy.py
+xqtrader strategy validate examples/macd_strategy/macd_strategy.py
 ```
 
 输出示例：
@@ -185,12 +185,12 @@ quanttrader strategy validate examples/macd_strategy/macd_strategy.py
 - `execute()` 方法是否已实现
 - 指标需求声明
 
-### quanttrader strategy new
+### xqtrader strategy new
 
 生成策略模板文件。
 
 ```bash
-quanttrader strategy new <NAME> [OPTIONS]
+xqtrader strategy new <NAME> [OPTIONS]
 ```
 
 | 参数 | 短写 | 默认值 | 说明 |
@@ -200,10 +200,10 @@ quanttrader strategy new <NAME> [OPTIONS]
 
 ```bash
 # 生成到当前目录
-quanttrader strategy new rsi_reversal
+xqtrader strategy new rsi_reversal
 
 # 指定输出路径
-quanttrader strategy new bollinger_breakout -o strategies/bollinger_breakout.py
+xqtrader strategy new bollinger_breakout -o strategies/bollinger_breakout.py
 ```
 
 生成的模板包含 `BaseStrategy` 子类骨架，可直接编辑实现策略逻辑。
@@ -216,16 +216,16 @@ quanttrader strategy new bollinger_breakout -o strategies/bollinger_breakout.py
 
 ```bash
 # 生成策略模板
-quanttrader strategy new my_strategy
+xqtrader strategy new my_strategy
 
 # 编辑策略逻辑
 vim my_strategy.py
 
 # 校验策略
-quanttrader strategy validate my_strategy.py
+xqtrader strategy validate my_strategy.py
 
 # 运行回测
-quanttrader backtest \
+xqtrader backtest \
   -s my_strategy.py \
   --symbol BTC/USDT \
   --start 2025-01-01 \
@@ -237,7 +237,7 @@ quanttrader backtest \
 
 ```bash
 for symbol in BTC/USDT ETH/USDT SOL/USDT; do
-  quanttrader backtest \
+  xqtrader backtest \
     -s my_strategy.py \
     --symbol "$symbol" \
     --start 2025-01-01 \
@@ -250,7 +250,7 @@ done
 
 ```bash
 for interval in 1m 5m 15m 1h; do
-  quanttrader backtest \
+  xqtrader backtest \
     -s my_strategy.py \
     --symbol BTC/USDT \
     -i "$interval" \

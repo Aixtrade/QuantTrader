@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from typing import Any, Deque, Dict, Optional, Tuple
 
 
-from quanttrader.strategies.base import (
+from xqtrader.strategies.base import (
     BaseStrategy,
     StrategyContext,
     StrategyDataRequirements,

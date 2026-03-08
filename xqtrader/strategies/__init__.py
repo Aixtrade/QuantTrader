@@ -1,4 +1,4 @@
-from quanttrader.strategies.base import (
+from xqtrader.strategies.base import (
     BaseStrategy,
     StrategyContext,
     StrategyDataRequirements,

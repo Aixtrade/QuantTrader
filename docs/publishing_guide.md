@@ -5,13 +5,13 @@
 ## 1. 项目配置最佳实践
 - 包元数据
   - `pyproject.toml` 使用 PEP 621，设置 `name/description/readme/license/authors/dependencies`，`dynamic = ["version"]` 由 `setuptools-scm` 生成。
-  - `packages = ["quanttrader"]` 或自动发现；如有 CLI，配置 `[project.scripts]`。
+  - `packages = ["xqtrader"]` 或自动发现；如有 CLI，配置 `[project.scripts]`。
   - Python 版本下限：`requires-python = ">=3.10"`（按需要调整）。
 - 依赖管理
   - 运行时依赖放 `dependencies`；开发/测试工具放 `optional-dependencies`（如 `dev`，包含 `pytest`, `setuptools-scm`）。
   - 使用 `uv lock` 固定版本，`uv sync --extra dev` 安装开发集。
 - 版本来源（已选方案：`setuptools-scm`）
-  - 在 `pyproject.toml` 声明 `[build-system]` 使用 `setuptools` 与 `setuptools-scm`；`[tool.setuptools_scm]` 控制版本写入 `quanttrader/_version.py`。
+  - 在 `pyproject.toml` 声明 `[build-system]` 使用 `setuptools` 与 `setuptools-scm`；`[tool.setuptools_scm]` 控制版本写入 `xqtrader/_version.py`。
   - 版本由 git tag `vX.Y.Z` 推导；无 tag 时使用后缀（node-and-date）。
 - 配置加载
   - 提供显式配置对象（dataclass），支持 `from_dict/from_env/from_yaml`；避免 import 时读取环境变量或写全局状态。
@@ -46,7 +46,7 @@
 - 分支建议：`main` 可发布；功能分支开发，发布由 tag 驱动。
 
 ## 5. 常用命令速查
-- 安装（用户）：`uv add quanttrader` 或 `pip install quanttrader`。
+- 安装（用户）：`uv add xqtrader` 或 `pip install xqtrader`。
 - 开发安装：`uv sync --extra dev`。
 - 运行示例：`uv run python examples/simple_backtest.py`。
 - 构建：`uv build`。

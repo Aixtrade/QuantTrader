@@ -1,4 +1,4 @@
-# QuantTrader
+# XQTrader
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -30,29 +30,29 @@ A quantitative trading engine toolkit for strategy development, backtesting, pap
 
 ### Use as a dependency
 
-Add QuantTrader to your project with uv:
+Add XQTrader to your project with uv:
 
 ```bash
-uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
 ```
 
 Or pin to a specific version tag:
 
 ```bash
-uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
+uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
 ```
 
 Or with pip:
 
 ```bash
-pip install "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+pip install "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
 ```
 
 ### Development install
 
 ```bash
 git clone https://github.com/Aixtrade/QuantTrader.git
-cd QuantTrader
+cd XQTrader
 
 # Install dependencies with uv
 uv sync --dev
@@ -68,7 +68,7 @@ pip install -e ".[dev]"
 ### 1. Create a Strategy
 
 ```python
-from quanttrader.strategies.base import (
+from xqtrader.strategies.base import (
     BaseStrategy,
     StrategyContext,
     StrategyResult,
@@ -105,7 +105,7 @@ class MyStrategy(BaseStrategy):
 ```python
 import asyncio
 from datetime import datetime, timedelta, timezone
-from quanttrader.engine.backtest import BacktestConfig, BacktestEngine
+from xqtrader.engine.backtest import BacktestConfig, BacktestEngine
 
 async def main():
     strategy = MyStrategy()
@@ -145,7 +145,7 @@ asyncio.run(main())
 ## Architecture
 
 ```
-quanttrader/
+xqtrader/
 ├── strategies/     # Strategy system - BaseStrategy and dynamic loader
 ├── engine/         # Execution engines - BacktestEngine / RealtimeEngine
 ├── accounts/       # Account management - SimulatedAccount / FuturesSimulatedAccount

@@ -8,7 +8,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any, Dict, Optional
 
-from quanttrader.data.adapters.base import (
+from xqtrader.data.adapters.base import (
     ExchangeAdapter,
     MarketType,
     OHLCVData,

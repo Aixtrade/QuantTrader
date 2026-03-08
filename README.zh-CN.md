@@ -1,4 +1,4 @@
-# QuantTrader
+# XQTrader
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -33,26 +33,26 @@
 使用 uv 添加到你的项目：
 
 ```bash
-uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
 ```
 
 锁定到特定版本 tag：
 
 ```bash
-uv add "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
+uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
 ```
 
 或使用 pip：
 
 ```bash
-pip install "quanttrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+pip install "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
 ```
 
 ### 开发安装
 
 ```bash
 git clone https://github.com/Aixtrade/QuantTrader.git
-cd QuantTrader
+cd XQTrader
 
 # 使用 uv 安装依赖
 uv sync --dev
@@ -68,7 +68,7 @@ pip install -e ".[dev]"
 ### 1. 创建策略
 
 ```python
-from quanttrader.strategies.base import (
+from xqtrader.strategies.base import (
     BaseStrategy,
     StrategyContext,
     StrategyResult,
@@ -105,7 +105,7 @@ class MyStrategy(BaseStrategy):
 ```python
 import asyncio
 from datetime import datetime, timedelta, timezone
-from quanttrader.engine.backtest import BacktestConfig, BacktestEngine
+from xqtrader.engine.backtest import BacktestConfig, BacktestEngine
 
 async def main():
     strategy = MyStrategy()
@@ -145,7 +145,7 @@ asyncio.run(main())
 ## 架构
 
 ```
-quanttrader/
+xqtrader/
 ├── strategies/     # 策略系统 - BaseStrategy 基类和动态加载器
 ├── engine/         # 执行引擎 - 回测引擎 / 实时引擎
 ├── accounts/       # 账户管理 - 模拟账户 / 合约模拟账户

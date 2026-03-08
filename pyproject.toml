@@ -1,5 +1,5 @@
 [project]
-name = "quanttrader"
+name = "xqtrader"
 description = "Quant trading engine toolkit"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -22,8 +22,8 @@ dev = [
 ]
 
 [project.scripts]
-quanttrader = "cli.main:cli"
-qtrader = "cli.main:cli"
+xqtrader = "cli.main:cli"
+xqt = "cli.main:cli"
 
 [build-system]
 requires = ["setuptools>=69", "setuptools-scm>=8"]
@@ -31,12 +31,12 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["quanttrader*", "cli*"]
+include = ["xqtrader*", "cli*"]
 
 [tool.setuptools_scm]
 version_scheme = "post-release"
 local_scheme = "node-and-date"
-write_to = "quanttrader/_version.py"
+write_to = "xqtrader/_version.py"
 
 [dependency-groups]
 dev = [

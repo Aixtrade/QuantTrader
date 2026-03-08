@@ -6,8 +6,8 @@ import asyncio
 
 from datetime import datetime, timedelta, timezone
 
-from quanttrader.data.adapters.base import MarketType
-from quanttrader.data.base import DataCenterService, MarketDataRequest
+from xqtrader.data.adapters.base import MarketType
+from xqtrader.data.base import DataCenterService, MarketDataRequest
 
 
 async def main() -> None:

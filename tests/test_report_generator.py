@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from quanttrader.reports.base import (
+from xqtrader.reports.base import (
     BacktestReport,
     EquityPoint,
     ReportGenerator,

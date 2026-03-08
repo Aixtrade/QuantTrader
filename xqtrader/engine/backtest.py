@@ -5,14 +5,14 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, List, Optional
 
-from quanttrader.accounts.futures import FuturesSimulatedAccount
-from quanttrader.data.adapters.base import MarketType
-from quanttrader.data.base import DataCenterService, MarketDataRequest
-from quanttrader.engine.base import BaseEngine, ExecutionConfig, ExecutionEvent, ExecutionMode
-from quanttrader.indicators.incremental import IndicatorBar, IndicatorEngine
-from quanttrader.strategies.base import BaseStrategy, StrategyContext
-from quanttrader.traders.futures import FuturesBacktestConfig, FuturesTrader, HedgePositionManager
-from quanttrader.traders.events import EventsBacktestConfig, EventsTrader
+from xqtrader.accounts.futures import FuturesSimulatedAccount
+from xqtrader.data.adapters.base import MarketType
+from xqtrader.data.base import DataCenterService, MarketDataRequest
+from xqtrader.engine.base import BaseEngine, ExecutionConfig, ExecutionEvent, ExecutionMode
+from xqtrader.indicators.incremental import IndicatorBar, IndicatorEngine
+from xqtrader.strategies.base import BaseStrategy, StrategyContext
+from xqtrader.traders.futures import FuturesBacktestConfig, FuturesTrader, HedgePositionManager
+from xqtrader.traders.events import EventsBacktestConfig, EventsTrader
 
 
 @dataclass

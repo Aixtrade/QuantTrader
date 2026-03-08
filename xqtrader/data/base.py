@@ -11,17 +11,17 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Type
 
-from quanttrader.data.adapters.base import (
+from xqtrader.data.adapters.base import (
     ExchangeAdapter,
     MarketType,
     OHLCVData,
     OrderBookData,
     TickerData,
 )
-from quanttrader.data.adapters.ccxt_adapter import CCXTAdapter, CCXT_AVAILABLE
-from quanttrader.data.adapters.binance import BinanceAdapter
-from quanttrader.data.cache import DataCenterCache
-from quanttrader.data.circuit_breaker import CircuitBreaker, CircuitBreakerOpenError
+from xqtrader.data.adapters.ccxt_adapter import CCXTAdapter, CCXT_AVAILABLE
+from xqtrader.data.adapters.binance import BinanceAdapter
+from xqtrader.data.cache import DataCenterCache
+from xqtrader.data.circuit_breaker import CircuitBreaker, CircuitBreakerOpenError
 
 
 @dataclass

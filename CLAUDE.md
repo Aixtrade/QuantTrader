@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-QuantTrader 是一个量化交易引擎工具包，支持策略开发、回测、模拟盘和实盘交易。当前处于 MVP v0 阶段（单标的回测闭环）。
+XQTrader 是一个量化交易引擎工具包，支持策略开发、回测、模拟盘和实盘交易。当前处于 MVP v0 阶段（单标的回测闭环）。
 
 ## 常用命令
 
@@ -28,7 +28,7 @@ uv run python main.py
 ## 架构概览
 
 ```
-quanttrader/
+xqtrader/
 ├── strategies/     # 策略系统 - BaseStrategy 基类和动态加载器
 ├── engine/         # 执行引擎 - BacktestEngine (回测) / RealtimeEngine (实时)
 ├── accounts/       # 账户管理 - SimulatedAccount / FuturesSimulatedAccount
@@ -91,7 +91,7 @@ class MyStrategy(BaseStrategy):
 基于 CCXT 实现，支持 100+ 交易所：
 
 ```python
-from quanttrader.data import DataCenterService, MarketDataRequest, MarketType
+from xqtrader.data import DataCenterService, MarketDataRequest, MarketType
 
 # 现货数据
 async with DataCenterService(market_type=MarketType.SPOT) as dc:

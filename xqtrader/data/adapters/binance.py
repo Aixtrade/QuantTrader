@@ -11,8 +11,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from quanttrader.data.adapters.base import MarketType, OHLCVData
-from quanttrader.data.adapters.ccxt_adapter import CCXTAdapter, CCXT_AVAILABLE
+from xqtrader.data.adapters.base import MarketType, OHLCVData
+from xqtrader.data.adapters.ccxt_adapter import CCXTAdapter, CCXT_AVAILABLE
 
 if CCXT_AVAILABLE:
     import ccxt.async_support as ccxt_async

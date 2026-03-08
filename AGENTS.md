@@ -1,25 +1,25 @@
 # AGENTS
 
 Purpose
-- 为量化交易引擎 QuantTrader 提供 agentic 编码指导。
+- 为量化交易引擎 XQTrader 提供 agentic 编码指导。
 - 变更保持最小化，遵循既有结构与命名。
 
 Repository snapshot
-- Python 包位于 `quanttrader/`。
+- Python 包位于 `xqtrader/`。
 - 测试位于 `tests/`。
 - 示例位于 `examples/`。
-- 配置集中在 `quanttrader/config/`。
+- 配置集中在 `xqtrader/config/`。
 - 当前无格式化/静态检查配置文件。
 
 Project layout
-- `quanttrader/strategies/`: 策略基类与加载器。
-- `quanttrader/engine/`: 回测/实时执行引擎。
-- `quanttrader/traders/`: 交易执行器。
-- `quanttrader/accounts/`: 模拟账户与保证金逻辑。
-- `quanttrader/data/`: 数据中心与交易所适配器。
-- `quanttrader/risk/`: 风控规则与风险等级。
-- `quanttrader/reports/`: 回测报告与记录。
-- `quanttrader/utils/`: 通用工具函数。
+- `xqtrader/strategies/`: 策略基类与加载器。
+- `xqtrader/engine/`: 回测/实时执行引擎。
+- `xqtrader/traders/`: 交易执行器。
+- `xqtrader/accounts/`: 模拟账户与保证金逻辑。
+- `xqtrader/data/`: 数据中心与交易所适配器。
+- `xqtrader/risk/`: 风控规则与风险等级。
+- `xqtrader/reports/`: 回测报告与记录。
+- `xqtrader/utils/`: 通用工具函数。
 
 Entry points
 - 主入口: `main.py`。
@@ -45,7 +45,7 @@ Cursor/Copilot rules
 
 Architecture cues
 - 数据流: DataCenterService -> Engine -> Strategy -> Trader -> Account -> Risk -> Report。
-- 基类集中在 `quanttrader/*/base.py`。
+- 基类集中在 `xqtrader/*/base.py`。
 - MVP 以单标的回测闭环为主。
 
 Code style: general
@@ -59,7 +59,7 @@ Code style: general
 Imports
 - 顺序: 标准库 -> 第三方 -> 本地包。
 - 避免通配符导入。
-- `quanttrader` 内使用绝对导入。
+- `xqtrader` 内使用绝对导入。
 - 同模块的多个导入放在同一行。
 
 Formatting
@@ -74,7 +74,7 @@ Documentation
 - 行为变更时同步更新文档字符串。
 
 Configuration and paths
-- 配置文件优先放在 `quanttrader/config/`。
+- 配置文件优先放在 `xqtrader/config/`。
 - 文件路径使用 `pathlib.Path`，避免硬编码绝对路径。
 - 示例脚本保持可直接运行，避免默认访问真实网络。
 
@@ -125,11 +125,11 @@ Data conventions
 - 新适配器遵循现有接口命名。
 
 Common file references
-- 策略基类: `quanttrader/strategies/base.py`。
-- 引擎基类: `quanttrader/engine/base.py`。
-- 数据中心: `quanttrader/data/base.py`。
-- 风控基类: `quanttrader/risk/base.py`。
-- 交易器: `quanttrader/traders/*.py`。
+- 策略基类: `xqtrader/strategies/base.py`。
+- 引擎基类: `xqtrader/engine/base.py`。
+- 数据中心: `xqtrader/data/base.py`。
+- 风控基类: `xqtrader/risk/base.py`。
+- 交易器: `xqtrader/traders/*.py`。
 
 Change checklist
 - 保持公开 API 兼容，除非明确要求变更。

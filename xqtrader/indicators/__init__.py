@@ -3,18 +3,18 @@
 基于 talipp 库提供 60+ 种技术指标的增量计算支持。
 """
 
-from quanttrader.indicators.incremental import (
+from xqtrader.indicators.incremental import (
     BaseIncrementalIndicator,
     IndicatorBar,
     IndicatorEngine,
     IndicatorRequirement,
 )
-from quanttrader.indicators.resampler import (
+from xqtrader.indicators.resampler import (
     OhlcvResampler,
     calculate_resample_ratio,
     needs_resampling,
 )
-from quanttrader.indicators.talipp_adapter import (
+from xqtrader.indicators.talipp_adapter import (
     TALIPP_REGISTRY,
     TalippIndicator,
     get_supported_indicators,

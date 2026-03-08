@@ -1,12 +1,12 @@
 ---
 name: release
-description: 发布 QuantTrader 新版本。执行完整的版本发布流程：检查工作区、运行测试、打 tag、构建、发布到 PyPI。当用户要求发布版本、打包发布、release 时使用此技能。
+description: 发布 XQTrader 新版本。执行完整的版本发布流程：检查工作区、运行测试、打 tag、构建、发布到 PyPI。当用户要求发布版本、打包发布、release 时使用此技能。
 argument-hint: <版本号> [--dry] [--testpypi]，如 0.2.0、0.2.0 --dry、0.2.0 --testpypi
 ---
 
-# QuantTrader 版本发布流程
+# XQTrader 版本发布流程
 
-你正在执行 QuantTrader 的版本发布。严格按照以下步骤顺序执行，每一步都必须通过后才能进入下一步。
+你正在执行 XQTrader 的版本发布。严格按照以下步骤顺序执行，每一步都必须通过后才能进入下一步。
 
 ## 参数解析
 
@@ -65,7 +65,7 @@ git tag -a "v<VERSION>" -m "Release <VERSION>"
 ## 第4步：清理旧构建
 
 ```bash
-rm -rf dist/ build/ *.egg-info quanttrader.egg-info
+rm -rf dist/ build/ *.egg-info xqtrader.egg-info
 ```
 
 ## 第5步：构建
@@ -76,7 +76,7 @@ uv build
 
 构建完成后验证：
 - `dist/` 下应存在 `.tar.gz`（sdist）和 `.whl`（wheel）两个文件
-- 文件名应包含版本号 `<VERSION>`（如 `quanttrader-0.2.0.tar.gz`）
+- 文件名应包含版本号 `<VERSION>`（如 `xqtrader-0.2.0.tar.gz`）
 - 如果版本号不干净（包含 `.post` 或 `+g` 后缀），说明 tag 未正确关联到当前 commit，**停止并排查**
 
 ## 第6步：发布
@@ -111,13 +111,13 @@ git push origin "v<VERSION>"
 ```
 发布完成!
   版本:  v<VERSION>
-  PyPI:  pip install quanttrader==<VERSION>
-  命令:  quanttrader --version / qtrader --version
+  PyPI:  pip install xqtrader==<VERSION>
+  命令:  xqtrader --version / xqt --version
 ```
 
 如果是 TestPyPI：
 ```
-  安装测试: pip install -i https://test.pypi.org/simple/ quanttrader==<VERSION>
+  安装测试: pip install -i https://test.pypi.org/simple/ xqtrader==<VERSION>
 ```
 
 ## 快捷方式
@@ -131,7 +131,7 @@ git push origin "v<VERSION>"
 ## 版本管理规则
 
 - 版本号由 `setuptools-scm` 从 git tag 自动生成
-- **不要**手动编辑 `quanttrader/_version.py`，该文件由构建系统自动生成
+- **不要**手动编辑 `xqtrader/_version.py`，该文件由构建系统自动生成
 - Tag 必须打在干净的 commit 上（无未提交变更），否则版本号会带后缀
 - `pyproject.toml` 中的 `dynamic = ["version"]` 确保版本号从 tag 获取
 
@@ -148,4 +148,4 @@ git push origin "v<VERSION>"
 
 - 发布脚本：`scripts/release.sh`
 - 项目配置：`pyproject.toml`
-- 版本文件（自动生成）：`quanttrader/_version.py`
+- 版本文件（自动生成）：`xqtrader/_version.py`

@@ -4,9 +4,9 @@ description: 创建量化交易策略文件。当用户要求创建新策略、�
 argument-hint: [策略名称，如 rsi_reversal]
 ---
 
-# 创建 QuantTrader 交易策略
+# 创建 XQTrader 交易策略
 
-你正在为 QuantTrader 量化交易引擎创建标准化的策略文件。严格遵循以下规范。
+你正在为 XQTrader 量化交易引擎创建标准化的策略文件。严格遵循以下规范。
 
 ## 策略文件结构
 
@@ -38,7 +38,7 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from quanttrader.strategies.base import (
+from xqtrader.strategies.base import (
     BaseStrategy,
     StrategyContext,
     StrategyDataRequirements,
@@ -208,8 +208,8 @@ class MyStrategy(BaseStrategy):
 """回测脚本 - 永续合约"""
 
 import asyncio
-from quanttrader.engine.backtest import BacktestEngine
-from quanttrader.config.backtest_config import BacktestConfig
+from xqtrader.engine.backtest import BacktestEngine
+from xqtrader.config.backtest_config import BacktestConfig
 from <strategy_module> import MyStrategy, MyStrategyConfig
 
 
@@ -353,8 +353,8 @@ StrategyResult(
 
 ## 参考文件
 
-- 策略基类：`quanttrader/strategies/base.py`
+- 策略基类：`xqtrader/strategies/base.py`
 - MACD 策略示例：`examples/macd_strategy/macd_strategy.py`
-- 回测引擎：`quanttrader/engine/backtest.py`
-- 指标引擎：`quanttrader/indicators/incremental.py`
-- 指标适配器：`quanttrader/indicators/talipp_adapter.py`
+- 回测引擎：`xqtrader/engine/backtest.py`
+- 指标引擎：`xqtrader/indicators/incremental.py`
+- 指标适配器：`xqtrader/indicators/talipp_adapter.py`

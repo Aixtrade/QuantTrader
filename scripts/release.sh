@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# QuantTrader 发布脚本
+# XQTrader 发布脚本
 #
 # 用法:
 #   ./scripts/release.sh 0.2.0          # 发布 v0.2.0
@@ -97,7 +97,7 @@ fi
 
 # ─── 清理旧构建 ───
 info "清理旧构建..."
-rm -rf dist/ build/ *.egg-info quanttrader.egg-info
+rm -rf dist/ build/ *.egg-info xqtrader.egg-info
 
 # ─── 构建 ───
 info "构建包..."
@@ -136,7 +136,7 @@ else
         info "发布到 TestPyPI..."
         uv publish --publish-url https://test.pypi.org/legacy/
         info "已发布到 TestPyPI"
-        echo -e "  安装测试: ${DIM}pip install -i https://test.pypi.org/simple/ quanttrader==$VERSION${RESET}"
+        echo -e "  安装测试: ${DIM}pip install -i https://test.pypi.org/simple/ xqtrader==$VERSION${RESET}"
     else
         info "发布到 PyPI..."
         read -p "确认发布 $TAG 到 PyPI? [y/N] " -n 1 -r
@@ -144,7 +144,7 @@ else
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             uv publish
             info "已发布到 PyPI"
-            echo -e "  安装: ${DIM}pip install quanttrader==$VERSION${RESET}"
+            echo -e "  安装: ${DIM}pip install xqtrader==$VERSION${RESET}"
         else
             warn "已取消发布 (tag $TAG 已创建，如需撤销: git tag -d $TAG)"
             exit 0

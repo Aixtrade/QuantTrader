@@ -3,9 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Tuple
 
-from quanttrader.accounts.base import BaseAccount, TradeResult
-from quanttrader.traders.base import BaseTrader
-from quanttrader.strategies.base import StrategySignal
+from xqtrader.accounts.base import BaseAccount, TradeResult
+from xqtrader.traders.base import BaseTrader
+from xqtrader.strategies.base import StrategySignal
 
 
 @dataclass

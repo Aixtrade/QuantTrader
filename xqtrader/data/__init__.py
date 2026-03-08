@@ -1,7 +1,7 @@
-from quanttrader.data.base import DataCenterService, MarketDataRequest
-from quanttrader.data.cache import DataCenterCache, LRUCache
-from quanttrader.data.circuit_breaker import CircuitBreaker, CircuitBreakerOpenError, CircuitState
-from quanttrader.data.adapters import (
+from xqtrader.data.base import DataCenterService, MarketDataRequest
+from xqtrader.data.cache import DataCenterCache, LRUCache
+from xqtrader.data.circuit_breaker import CircuitBreaker, CircuitBreakerOpenError, CircuitState
+from xqtrader.data.adapters import (
     ExchangeAdapter,
     MarketType,
     CCXTAdapter,

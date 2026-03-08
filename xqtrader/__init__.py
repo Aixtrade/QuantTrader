@@ -1,5 +1,5 @@
-from quanttrader._version import __version__
-from quanttrader.strategies.base import (
+from xqtrader._version import __version__
+from xqtrader.strategies.base import (
     BaseStrategy,
     StrategyContext,
     StrategyResult,
@@ -7,15 +7,15 @@ from quanttrader.strategies.base import (
     StrategyDataRequirements,
     StrategyLoader,
 )
-from quanttrader.engine.base import BaseEngine, ExecutionConfig, ExecutionEvent, ExecutionMode
-from quanttrader.engine.backtest import BacktestEngine, BacktestConfig
-from quanttrader.accounts.simulated import SimulatedAccount
-from quanttrader.accounts.futures import FuturesSimulatedAccount, PositionSide
-from quanttrader.traders.events import EventsTrader, EventsBacktestConfig
-from quanttrader.traders.futures import FuturesTrader, FuturesBacktestConfig, HedgePositionManager
-from quanttrader.data.base import DataCenterService, MarketDataRequest
-from quanttrader.risk.base import RiskManager, RiskConfig, RiskLevel, RiskAction
-from quanttrader.reports.base import BacktestReport, TradeRecord, EquityPoint, ReportGenerator, ReportCollector
+from xqtrader.engine.base import BaseEngine, ExecutionConfig, ExecutionEvent, ExecutionMode
+from xqtrader.engine.backtest import BacktestEngine, BacktestConfig
+from xqtrader.accounts.simulated import SimulatedAccount
+from xqtrader.accounts.futures import FuturesSimulatedAccount, PositionSide
+from xqtrader.traders.events import EventsTrader, EventsBacktestConfig
+from xqtrader.traders.futures import FuturesTrader, FuturesBacktestConfig, HedgePositionManager
+from xqtrader.data.base import DataCenterService, MarketDataRequest
+from xqtrader.risk.base import RiskManager, RiskConfig, RiskLevel, RiskAction
+from xqtrader.reports.base import BacktestReport, TradeRecord, EquityPoint, ReportGenerator, ReportCollector
 
 __all__ = [
     "__version__",

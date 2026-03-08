@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from quanttrader.accounts.base import BaseAccount
+from xqtrader.accounts.base import BaseAccount
 
 
 class RiskLevel(str, Enum):

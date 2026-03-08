@@ -1,19 +1,19 @@
-"""QuantTrader CLI - 量化交易引擎命令行工具"""
+"""XQTrader CLI - 量化交易引擎命令行工具"""
 
 from __future__ import annotations
 
 import click
 
-from quanttrader import __version__
+from xqtrader import __version__
 
 from cli.commands.backtest import backtest
 from cli.commands.strategy import strategy
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="QuantTrader")
+@click.version_option(version=__version__, prog_name="XQTrader")
 def cli() -> None:
-    """QuantTrader - 量化交易引擎"""
+    """XQTrader - 量化交易引擎"""
     pass
 
 
