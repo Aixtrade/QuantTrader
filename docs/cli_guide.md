@@ -7,11 +7,13 @@
 pip install xqtrader
 
 # 核心库 + CLI 命令行工具
-pip install xqtrader[cli]
+pip install "xqtrader[cli]"
 
 # 开发模式（从源码）
 uv sync --dev
 ```
+
+> **注意**：zsh 用户必须用引号包裹 `"xqtrader[cli]"`，否则 `[]` 会被解释为 glob 语法。
 
 安装后提供两个等价命令：
 
