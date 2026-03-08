@@ -1,4 +1,8 @@
-from xqtrader._version import __version__
+try:
+    from xqtrader._version import __version__
+except ImportError:
+    from importlib.metadata import version
+    __version__ = version("xqtrader")
 from xqtrader.strategies.base import (
     BaseStrategy,
     StrategyContext,
