@@ -83,9 +83,28 @@ info "Tag:   $TAG"
 info "分支:  $BRANCH"
 $DRY_RUN && info "模式: DRY RUN (不会实际发布)"
 
+# ─── 加载环境变量 ───
+if [[ -f .env ]]; then
+    source .env
+    info "已加载 .env"
+fi
+
+if $USE_TESTPYPI && [[ -n "${TESTPYPI_TOKEN:-}" ]]; then
+    export UV_PUBLISH_TOKEN="$TESTPYPI_TOKEN"
+fi
+
 # ─── 运行测试 ───
 info "运行测试..."
 uv run pytest -q || error "测试未通过"
+
+# ─── 检查测试是否弄脏工作区 ───
+DIRTY_AFTER_TEST=$(git status --porcelain)
+if [[ -n "$DIRTY_AFTER_TEST" ]]; then
+    warn "运行测试后工作区变脏（uv.lock / _version.py 等被修改）"
+    warn "变更文件:"
+    echo "$DIRTY_AFTER_TEST"
+    error "请先提交这些变更再发布: git add -A && git commit -m 'Sync lock files'"
+fi
 
 # ─── 打 Tag ───
 info "创建 tag: $TAG"
@@ -97,7 +116,7 @@ fi
 
 # ─── 清理旧构建 ───
 info "清理旧构建..."
-rm -rf dist/ build/ *.egg-info xqtrader.egg-info
+rm -rf dist/ build/ *.egg-info xqtrader.egg-info xqtrader/_version.py
 
 # ─── 构建 ───
 info "构建包..."

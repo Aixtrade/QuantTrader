@@ -52,6 +52,16 @@ uv run pytest -q
 - 测试必须全部通过才能继续
 - 如果有失败，停止发布并展示失败信息
 
+**重要：运行测试后再次检查工作区是否干净！**
+
+`uv run pytest` 会触发 `setuptools-scm` 生成 `xqtrader/_version.py`，还可能更新 `uv.lock`。如果这些文件变脏（`git status --porcelain` 有输出），必须先提交这些变更再继续，否则打 tag 后构建出的版本号会带 `.post0+g...` 后缀。
+
+```bash
+# 检查测试后工作区状态
+git status --porcelain
+# 如果有变化，提示用户 commit 后重新开始
+```
+
 ## 第3步：创建 Git Tag
 
 ```bash
@@ -64,8 +74,10 @@ git tag -a "v<VERSION>" -m "Release <VERSION>"
 
 ## 第4步：清理旧构建
 
+**必须清理 `_version.py` 缓存**，否则会使用旧的版本号：
+
 ```bash
-rm -rf dist/ build/ *.egg-info xqtrader.egg-info
+rm -rf dist/ build/ *.egg-info xqtrader.egg-info xqtrader/_version.py
 ```
 
 ## 第5步：构建
@@ -81,14 +93,22 @@ uv build
 
 ## 第6步：发布
 
+发布前加载 `.env` 中的 PyPI token：
+
+```bash
+source .env
+```
+
+`.env` 中 `UV_PUBLISH_TOKEN` 会被 `uv publish` 自动读取。
+
 ### 正式 PyPI（默认）
 ```bash
-uv publish
+source .env && uv publish
 ```
 
 ### TestPyPI（--testpypi 模式）
 ```bash
-uv publish --publish-url https://test.pypi.org/legacy/
+source .env && UV_PUBLISH_TOKEN="$TESTPYPI_TOKEN" uv publish --publish-url https://test.pypi.org/legacy/
 ```
 
 ### DRY RUN（--dry 模式）
@@ -96,11 +116,12 @@ uv publish --publish-url https://test.pypi.org/legacy/
 
 **重要：发布到正式 PyPI 前必须向用户确认。**
 
-## 第7步：推送 Tag（可选）
+## 第7步：推送 Tag 和 commits
 
-发布成功后，询问用户是否推送 tag 到远程：
+发布成功后，询问用户是否推送 tag 和 commits 到远程：
 
 ```bash
+git push origin main
 git push origin "v<VERSION>"
 ```
 
@@ -112,6 +133,7 @@ git push origin "v<VERSION>"
 发布完成!
   版本:  v<VERSION>
   PyPI:  pip install xqtrader==<VERSION>
+  CLI:   pip install xqtrader[cli]==<VERSION>
   命令:  xqtrader --version / xqt --version
 ```
 
@@ -131,16 +153,17 @@ git push origin "v<VERSION>"
 ## 版本管理规则
 
 - 版本号由 `setuptools-scm` 从 git tag 自动生成
-- **不要**手动编辑 `xqtrader/_version.py`，该文件由构建系统自动生成
+- **不要**手动编辑 `xqtrader/_version.py`，该文件由构建系统自动生成且在 `.gitignore` 中
 - Tag 必须打在干净的 commit 上（无未提交变更），否则版本号会带后缀
 - `pyproject.toml` 中的 `dynamic = ["version"]` 确保版本号从 tag 获取
+- `uv run pytest` 等命令会重新生成 `_version.py`，构建前务必清理
 
 ## 错误处理
 
 | 错误 | 原因 | 解决 |
 |------|------|------|
-| 版本号带 `.post0+g...` 后缀 | tag 未在当前 commit 上 | 确保先 commit 所有变更再打 tag |
-| `uv publish` 认证失败 | 未配置 PyPI token | 运行 `uv publish --token <TOKEN>` 或设置 `UV_PUBLISH_TOKEN` 环境变量 |
+| 版本号带 `.post0+g...` 后缀 | 工作区脏或 `_version.py` 缓存 | 1) 确保 `uv.lock` 等已提交 2) 清理 `_version.py` 后重新构建 |
+| `uv publish` 认证失败 | 未配置 PyPI token | 确保 `.env` 中有 `UV_PUBLISH_TOKEN`，发布前 `source .env` |
 | Tag 已存在 | 版本号重复 | 选择新版本号，或 `git tag -d v<VERSION>` 删除后重试 |
 | 测试失败 | 代码问题 | 修复测试后重新发布 |
 
@@ -148,4 +171,5 @@ git push origin "v<VERSION>"
 
 - 发布脚本：`scripts/release.sh`
 - 项目配置：`pyproject.toml`
+- 环境变量：`.env`（含 `UV_PUBLISH_TOKEN`、`TESTPYPI_TOKEN`）
 - 版本文件（自动生成）：`xqtrader/_version.py`
