@@ -7,6 +7,7 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 
 from quanttrader.engine.backtest import BacktestConfig, BacktestEngine
+from quanttrader.reports.base import ReportCollector, ReportGenerator
 from macd_strategy import MACDConfig, MACDStrategy
 
 
@@ -38,6 +39,15 @@ async def main() -> None:
         enable_cache=False,
     )
 
+    collector = ReportCollector(
+        strategy_name=strategy.name,
+        symbol=config.symbol,
+        interval=config.interval,
+        initial_capital=config.initial_capital,
+        start_time=requested_start_time,
+        end_time=requested_end_time,
+    )
+
     indicator_id = f"macd_{macd_config.timeframe}"
     warmed_up = False
 
@@ -47,6 +57,7 @@ async def main() -> None:
     latest_macd = {}
 
     async for event in engine.run(strategy, config):
+        collector.collect(event)
         if event.event_type == "tick":
             indicators = event.data.get("incremental_indicators", {})
             timeframe_state = indicators.get("by_timeframe", {}).get(macd_config.timeframe, {})
@@ -103,6 +114,25 @@ async def main() -> None:
         elif event.event_type == "complete":
             print(f"\n{'='*50}")
             print(f"回测完成 | 总信号数: {signal_count} | 最终余额: {event.data.get('final_balance')}")
+
+    # 生成报告
+    report = collector.build()
+    report_path = "report_events.json"
+    ReportGenerator.export(report, format="json", path=report_path)
+    print(f"\n报告已导出: {report_path}")
+
+    summary = report.to_dict()
+    print(f"\n===== 回测报告摘要 =====")
+    print(f"策略: {summary['summary']['strategy_name']}")
+    print(f"标的: {summary['summary']['symbol']}")
+    print(f"区间: {summary['summary']['period']}")
+    print(f"总收益率: {summary['returns']['total_return']:.2%}")
+    print(f"总盈亏: {summary['returns']['total_pnl']:.2f}")
+    print(f"总交易: {summary['trades']['total']}")
+    print(f"胜率: {summary['trades']['win_rate']:.2%}")
+    print(f"盈亏比: {summary['trades']['profit_factor']:.2f}")
+    print(f"最大回撤: {summary['risk']['max_drawdown_pct']:.2%}")
+    print(f"夏普比率: {summary['risk']['sharpe_ratio']:.2f}")
 
 
 if __name__ == "__main__":

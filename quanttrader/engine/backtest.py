@@ -157,6 +157,7 @@ class BacktestEngine(BaseEngine):
                         "timeframe": bar.timeframe,
                     },
                     "incremental_indicators": incremental_indicators,
+                    "account_balance": account.balance,
                 },
                 timestamp=datetime.utcnow(),
             )

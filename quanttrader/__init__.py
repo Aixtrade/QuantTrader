@@ -15,7 +15,7 @@ from quanttrader.traders.events import EventsTrader, EventsBacktestConfig
 from quanttrader.traders.futures import FuturesTrader, FuturesBacktestConfig, HedgePositionManager
 from quanttrader.data.base import DataCenterService, MarketDataRequest
 from quanttrader.risk.base import RiskManager, RiskConfig, RiskLevel, RiskAction
-from quanttrader.reports.base import BacktestReport, TradeRecord, EquityPoint
+from quanttrader.reports.base import BacktestReport, TradeRecord, EquityPoint, ReportGenerator, ReportCollector
 
 __all__ = [
     "__version__",
@@ -48,4 +48,6 @@ __all__ = [
     "BacktestReport",
     "TradeRecord",
     "EquityPoint",
+    "ReportGenerator",
+    "ReportCollector",
 ]
