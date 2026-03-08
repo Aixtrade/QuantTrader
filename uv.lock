@@ -1117,18 +1117,22 @@ name = "xqtrader"
 source = { editable = "." }
 dependencies = [
     { name = "ccxt" },
-    { name = "click" },
     { name = "httpx" },
     { name = "numpy" },
     { name = "pydantic" },
-    { name = "rich" },
     { name = "talipp" },
 ]
 
 [package.optional-dependencies]
+cli = [
+    { name = "click" },
+    { name = "rich" },
+]
 dev = [
+    { name = "click" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
+    { name = "rich" },
     { name = "setuptools-scm" },
 ]
 
@@ -1140,17 +1144,19 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "ccxt", specifier = ">=4.5.34" },
-    { name = "click", specifier = ">=8.3.1" },
+    { name = "click", marker = "extra == 'cli'", specifier = ">=8.3.1" },
+    { name = "click", marker = "extra == 'dev'", specifier = ">=8.3.1" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "numpy", specifier = ">=2.4.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },
-    { name = "rich", specifier = ">=14.3.3" },
+    { name = "rich", marker = "extra == 'cli'", specifier = ">=14.3.3" },
+    { name = "rich", marker = "extra == 'dev'", specifier = ">=14.3.3" },
     { name = "setuptools-scm", marker = "extra == 'dev'", specifier = ">=8.1" },
     { name = "talipp", specifier = ">=2.7.0" },
 ]
-provides-extras = ["dev"]
+provides-extras = ["cli", "dev"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest-asyncio", specifier = ">=1.3.0" }]
