@@ -1,6 +1,4 @@
-def main():
-    print("Hello from quanttrader!")
-
+from cli.main import cli
 
 if __name__ == "__main__":
-    main()
+    cli()

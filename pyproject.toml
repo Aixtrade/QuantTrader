@@ -5,9 +5,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "ccxt>=4.5.34",
+    "click>=8.3.1",
     "httpx>=0.28.1",
     "numpy>=2.4.1",
     "pydantic>=2.12.5",
+    "rich>=14.3.3",
     "talipp>=2.7.0",
 ]
 dynamic = ["version"]
@@ -19,13 +21,17 @@ dev = [
     "setuptools-scm>=8.1",
 ]
 
+[project.scripts]
+quanttrader = "cli.main:cli"
+qtrader = "cli.main:cli"
+
 [build-system]
 requires = ["setuptools>=69", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["quanttrader*"]
+include = ["quanttrader*", "cli*"]
 
 [tool.setuptools_scm]
 version_scheme = "post-release"
