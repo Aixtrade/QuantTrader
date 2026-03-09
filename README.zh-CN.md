@@ -11,11 +11,38 @@
 
 ## 安装
 
+使用 [uv](https://github.com/astral-sh/uv) 全局安装（推荐）：
+
+```bash
+uv tool install "xqtrader[cli]"
+```
+
+或添加到项目依赖：
+
+```bash
+uv add "xqtrader[cli]"
+```
+
+或使用 pip：
+
 ```bash
 pip install "xqtrader[cli]"
 ```
 
 > **注意**：zsh 用户必须用引号包裹 `"xqtrader[cli]"`，否则 `[]` 会被解释为 glob 语法。
+
+### 升级
+
+```bash
+# uv 全局安装
+uv tool upgrade xqtrader
+
+# uv 项目依赖
+uv add --upgrade "xqtrader[cli]"
+
+# pip
+pip install --upgrade "xqtrader[cli]"
+```
 
 ---
 

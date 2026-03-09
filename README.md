@@ -11,11 +11,38 @@ A quantitative trading engine toolkit — create strategies, run backtests, and 
 
 ## Installation
 
+Global install with [uv](https://github.com/astral-sh/uv) (recommended):
+
+```bash
+uv tool install "xqtrader[cli]"
+```
+
+Or add as a project dependency:
+
+```bash
+uv add "xqtrader[cli]"
+```
+
+Or with pip:
+
 ```bash
 pip install "xqtrader[cli]"
 ```
 
 > **Note**: zsh users must quote `"xqtrader[cli]"` to avoid glob interpretation.
+
+### Upgrade
+
+```bash
+# uv global install
+uv tool upgrade xqtrader
+
+# uv project dependency
+uv add --upgrade "xqtrader[cli]"
+
+# pip
+pip install --upgrade "xqtrader[cli]"
+```
 
 ---
 
