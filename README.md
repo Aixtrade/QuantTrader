@@ -7,6 +7,8 @@
 
 A quantitative trading engine toolkit — create strategies, run backtests, and analyze results using natural language.
 
+<video src="assets/create-strategy-demo.mp4" controls width="100%"></video>
+
 ---
 
 ## Installation

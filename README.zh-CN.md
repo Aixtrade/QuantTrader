@@ -7,6 +7,8 @@
 
 量化交易引擎工具包 — 通过自然语言创建策略、运行回测、分析结果。
 
+<video src="assets/create-strategy-demo.mp4" controls width="100%"></video>
+
 ---
 
 ## 安装
@@ -79,7 +81,7 @@ cp -r skills/* .claude/skills/
 ```
 
 ```
-创建一个 MACD 金叉死叉策略，1h 周期，带趋势过滤
+创建一个 MACD 金叉死叉策略，5 分钟周期，带趋势过滤
 ```
 
 ```
@@ -115,7 +117,7 @@ cp -r skills/* .claude/skills/
 ```
 
 ```
-用事件合约模式回测这个策略，BTC/USDT，最近一个月
+用事件合约模式回测这个策略，BTC/USDT，最近 1 小时，通过回测结果评估其效果
 ```
 
 也可以使用斜杠命令：
