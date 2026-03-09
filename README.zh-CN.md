@@ -7,7 +7,7 @@
 
 量化交易引擎工具包 — 通过自然语言创建策略、运行回测、分析结果。
 
-<video src="assets/create-strategy-demo.mp4" controls width="100%"></video>
+<video src="https://github.com/Aixtrade/QuantTrader/raw/main/assets/create-strategy-demo.mp4" controls width="100%"></video>
 
 ---
 
