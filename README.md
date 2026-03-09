@@ -5,241 +5,155 @@
 
 [中文文档](README.zh-CN.md)
 
-A quantitative trading engine toolkit for strategy development, backtesting, paper trading, and live trading.
-
----
-
-## Features
-
-- **Strategy Framework**: Modular strategy system with hot-reload support
-- **Multi-Exchange Support**: 100+ exchanges via CCXT
-- **Technical Indicators**: 60+ indicators powered by talipp
-- **Futures Trading**: Perpetual futures with hedge mode
-- **Event Contracts**: Binary options style trading
-- **Risk Management**: Multi-level risk control (WARNING/CRITICAL)
-- **Smart Caching**: LRU + TTL caching with circuit breaker
+A quantitative trading engine toolkit — create strategies, run backtests, and analyze results using natural language.
 
 ---
 
 ## Installation
 
-### Requirements
-
-- Python >= 3.12
-- [uv](https://github.com/astral-sh/uv) (recommended) or pip
-
-### Use as a dependency
-
-Add XQTrader to your project with uv:
-
 ```bash
-uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+pip install "xqtrader[cli]"
 ```
 
-Or pin to a specific version tag:
+> **Note**: zsh users must quote `"xqtrader[cli]"` to avoid glob interpretation.
+
+---
+
+## Configure Your AI Tool
+
+XQTrader provides skill files (in the `skills/` directory) that teach AI coding tools how to create strategies and run backtests.
+
+Copy the contents of the `skills/` directory to the appropriate location for your tool:
+
+| Tool | Target path |
+|------|------------|
+| [Claude Code](https://claude.ai/code) | Project: `.claude/skills/`, or personal: `~/.claude/skills/` |
+| [OpenCode](https://opencode.ai) | `.opencode/skills/`, `.claude/skills/`, or `.agents/skills/` |
+| [OpenClaw](https://docs.openclaw.ai) | Configure in `~/.openclaw/openclaw.json` |
+
+For example, with Claude Code:
 
 ```bash
-uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
+cp -r skills/* .claude/skills/
 ```
 
-Or with pip:
+Once configured, you can use natural language or slash commands (`/create-strategy`, `/backtest`) for all operations.
 
-```bash
-pip install "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+---
+
+## Usage
+
+### Create a Strategy
+
+Describe your strategy idea and Claude will generate a complete strategy file:
+
+```
+Create an RSI overbought/oversold reversal strategy
 ```
 
-### Development install
+```
+Build a MACD crossover strategy for 1h timeframe with trend filtering
+```
 
-```bash
-git clone https://github.com/Aixtrade/QuantTrader.git
-cd XQTrader
+```
+I want a Bollinger Band breakout strategy for ranging markets
+```
 
-# Install dependencies with uv
-uv sync --group dev
+```
+Create an event contract strategy based on RSI and volume to predict short-term direction
+```
 
-# Or with pip
-pip install -e ".[dev]"
+Or use the slash command for quick generation:
+
+```
+/create-strategy rsi_reversal
+```
+
+The generated strategy file includes indicator declarations and signal logic, ready for backtesting.
+
+### Run a Backtest
+
+Describe your backtest in natural language:
+
+```
+Backtest rsi_reversal.py on BTC/USDT for the last 3 months
+```
+
+```
+Test this strategy on ETH/USDT from 2025-01-01 to 2025-03-01, 1h interval, 50k capital
+```
+
+```
+Compare this strategy's performance on BTC and ETH
+```
+
+```
+Backtest this strategy with event contracts on BTC/USDT for the last month
+```
+
+Or use the slash command:
+
+```
+/backtest rsi_reversal.py --symbol BTC/USDT --start 2025-01-01 --end 2025-03-01
+```
+
+Claude will validate the strategy, execute the backtest, and explain the results including returns, win rate, max drawdown, and Sharpe ratio.
+
+### Iterate and Optimize
+
+After backtesting, continue refining with natural language:
+
+```
+Win rate is too low, try changing the RSI oversold threshold from 30 to 25
+```
+
+```
+Add a stop-loss at 2% drawdown
+```
+
+```
+Switch to 4h timeframe and re-run the backtest
 ```
 
 ---
 
-## Quick Start
+## Typical Workflow
 
-### 1. Create a Strategy
-
-```python
-from xqtrader.strategies.base import (
-    BaseStrategy,
-    StrategyContext,
-    StrategyResult,
-)
-
-class MyStrategy(BaseStrategy):
-    def __init__(self):
-        super().__init__(name="my_strategy", version="1.0.0")
-
-    def execute(self, context: StrategyContext) -> StrategyResult:
-        close_prices = context.market_data.get("close", [])
-        if not close_prices:
-            return StrategyResult(
-                signals=[self.create_signal("HOLD", context.symbol)],
-                indicators={},
-                metadata={},
-                execution_time=0.0,
-                success=True,
-            )
-
-        # Your trading logic here
-        signal = self.create_signal("LONG", context.symbol, confidence=0.8)
-        return StrategyResult(
-            signals=[signal],
-            indicators={},
-            metadata={},
-            execution_time=0.0,
-            success=True,
-        )
 ```
-
-### 2. Run Backtest
-
-```python
-import asyncio
-from datetime import datetime, timedelta, timezone
-from xqtrader.engine.backtest import BacktestConfig, BacktestEngine
-
-async def main():
-    strategy = MyStrategy()
-    engine = BacktestEngine()
-
-    now = datetime.now(timezone.utc)
-    config = BacktestConfig(
-        symbol="BTC/USDT",
-        interval="1h",
-        initial_capital=10000.0,
-        start_time=int((now - timedelta(days=7)).timestamp() * 1000),
-        end_time=int(now.timestamp() * 1000),
-    )
-
-    async for event in engine.run(strategy, config):
-        if event.event_type == "trade":
-            print(f"Trade: {event.data}")
-        elif event.event_type == "complete":
-            print(f"Final balance: {event.data.get('final_balance')}")
-
-asyncio.run(main())
+1. Describe your strategy idea    →  Claude generates the strategy file
+2. Review the generated code      →  Confirm or request changes
+3. Say "run a backtest"           →  Claude executes and explains results
+4. Suggest adjustments            →  Iterate and optimize
 ```
 
 ---
 
-## Signal Conventions
+## Signal Types
 
 | Contract Type | Signals |
 |--------------|---------|
 | Perpetual/Futures | `LONG`, `SHORT`, `CLOSE_LONG`, `CLOSE_SHORT`, `CLOSE` |
 | Event Contracts | `UP`, `DOWN`, `HOLD` |
 
-> Event trader also accepts `LONG`/`SHORT`/`BUY`/`SELL` and auto-maps to `UP`/`DOWN`.
+---
+
+## Features
+
+- **Natural Language Workflow**: Create and test strategies conversationally via Claude Code
+- **60+ Technical Indicators**: RSI, MACD, Bollinger Bands, ATR, KDJ, and more
+- **Multi-Exchange Support**: 100+ exchanges via CCXT
+- **Futures Trading**: Perpetual futures with hedge mode position management
+- **Risk Management**: Multi-level risk control (daily loss 3.5%/5%, max drawdown 10%/15%)
 
 ---
 
-## Architecture
+## Documentation
 
-```
-xqtrader/
-├── strategies/     # Strategy system - BaseStrategy and dynamic loader
-├── engine/         # Execution engines - BacktestEngine / RealtimeEngine
-├── accounts/       # Account management - SimulatedAccount / FuturesSimulatedAccount
-├── traders/        # Trade executors - EventsTrader / FuturesTrader
-├── data/           # Data services - DataCenterService + CCXT adapters
-│   └── adapters/   # Exchange adapters - CCXTAdapter / BinanceAdapter
-├── indicators/     # Technical indicators - 60+ indicators via talipp
-├── risk/           # Risk management - RiskManager (WARNING/CRITICAL levels)
-├── reports/        # Report generation - BacktestReport / TradeRecord
-└── config/         # Configuration management
-```
-
-### Data Flow
-
-```
-Market Data (OHLCV) → Indicator Engine → Strategy Context → Strategy Execution
-     ↓                                                            ↓
-DataCenterService                                          StrategyResult
-                                                                  ↓
-Account Update ← Trade Execution ← Risk Check ← Trading Signals
-     ↓
-BacktestReport
-```
-
----
-
-## Examples
-
-See the [`examples/`](examples/) directory for complete examples:
-
-- **MACD Strategy**: `examples/macd_strategy/`
-  - `macd_strategy.py` - Strategy implementation
-  - `run_backtest_futures.py` - Futures backtest
-  - `run_backtest_events.py` - Event contracts backtest
-
----
-
-## Development
-
-```bash
-# Run all tests
-uv run pytest
-
-# Run specific test file
-uv run pytest tests/test_data_center.py -v
-
-# Run specific test class
-uv run pytest tests/test_data_center.py::TestLRUCache -v
-
-# Run examples
-uv run python examples/macd_strategy/run_backtest_futures.py
-```
-
----
-
-## Risk Rules
-
-| Rule | Warning | Critical |
-|------|---------|----------|
-| Daily Loss | 3.5% | 5% |
-| Max Drawdown | 10% | 15% |
-
----
-
-## Roadmap
-
-- [x] **MVP v0**: Single-asset backtesting
-- [ ] **MVP v1**: Real-time paper trading
-- [ ] **MVP v2**: Funding rate optimization
-- [ ] **MVP v3**: Multi-asset portfolio
-- [ ] **MVP v4**: Live trading interface
-
-See [`docs/trading_system_roadmap.md`](docs/trading_system_roadmap.md) for details.
-
----
-
-## Dependencies
-
-| Package | Purpose |
-|---------|---------|
-| [ccxt](https://github.com/ccxt/ccxt) | Exchange connectivity |
-| [talipp](https://github.com/nardew/talipp) | Technical indicators |
-| [numpy](https://numpy.org/) | Numerical computing |
-| [pydantic](https://pydantic.dev/) | Data validation |
-| [httpx](https://www.python-httpx.org/) | Async HTTP client |
+- [CLI Guide](docs/cli_guide.md) — Command-line reference
+- [Development Guide](docs/development_guide.md) — Architecture and developer docs
 
 ---
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-## Contributing
-
-Contributions are welcome! Please read the [AGENTS.md](AGENTS.md) for coding conventions.

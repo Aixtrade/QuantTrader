@@ -5,241 +5,155 @@
 
 [English](README.md)
 
-一个量化交易引擎工具包，支持策略开发、回测、模拟盘和实盘交易。
-
----
-
-## 功能特性
-
-- **策略框架**: 模块化策略系统，支持热重载
-- **多交易所支持**: 通过 CCXT 支持 100+ 交易所
-- **技术指标**: 基于 talipp 的 60+ 技术指标
-- **合约交易**: 永续合约双向持仓模式
-- **事件合约**: 二元期权风格交易
-- **风控系统**: 分级风控机制 (WARNING/CRITICAL)
-- **智能缓存**: LRU + TTL 缓存及熔断保护
+量化交易引擎工具包 — 通过自然语言创建策略、运行回测、分析结果。
 
 ---
 
 ## 安装
 
-### 环境要求
-
-- Python >= 3.12
-- [uv](https://github.com/astral-sh/uv) (推荐) 或 pip
-
-### 作为依赖引用
-
-使用 uv 添加到你的项目：
-
 ```bash
-uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+pip install "xqtrader[cli]"
 ```
 
-锁定到特定版本 tag：
+> **注意**：zsh 用户必须用引号包裹 `"xqtrader[cli]"`，否则 `[]` 会被解释为 glob 语法。
+
+---
+
+## 配置 AI 工具
+
+XQTrader 提供了 skills 文件（位于 `skills/` 目录），用于让 AI 编码工具理解如何创建策略和运行回测。
+
+根据你使用的 AI 编码工具，将 `skills/` 目录下的内容复制到对应位置：
+
+| 工具 | 目标路径 |
+|------|---------|
+| [Claude Code](https://claude.ai/code) | 项目级：`.claude/skills/`，或个人级：`~/.claude/skills/` |
+| [OpenCode](https://opencode.ai) | `.opencode/skills/`、`.claude/skills/` 或 `.agents/skills/` |
+| [OpenClaw](https://docs.openclaw.ai) | `~/.openclaw/openclaw.json` 中配置 |
+
+以 Claude Code 为例：
 
 ```bash
-uv add "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@v0.1.0"
+cp -r skills/* .claude/skills/
 ```
 
-或使用 pip：
+配置完成后，即可通过自然语言或斜杠命令（如 `/create-strategy`、`/backtest`）完成所有操作。
 
-```bash
-pip install "xqtrader @ git+https://github.com/Aixtrade/QuantTrader.git@main"
+---
+
+## 使用方式
+
+### 创建策略
+
+直接描述你的策略想法，Claude 会生成完整的策略文件：
+
+```
+帮我创建一个 RSI 超买超卖反转策略
 ```
 
-### 开发安装
+```
+创建一个 MACD 金叉死叉策略，1h 周期，带趋势过滤
+```
 
-```bash
-git clone https://github.com/Aixtrade/QuantTrader.git
-cd XQTrader
+```
+我想做一个布林带突破策略，适合震荡行情
+```
 
-# 使用 uv 安装依赖
-uv sync --group dev
+```
+创建一个事件合约策略，基于 RSI 和成交量判断短期涨跌方向
+```
 
-# 或使用 pip
-pip install -e ".[dev]"
+也可以使用斜杠命令快速生成：
+
+```
+/create-strategy rsi_reversal
+```
+
+生成的策略文件包含完整的指标声明和信号逻辑，可直接用于回测。
+
+### 运行回测
+
+用自然语言描述回测需求：
+
+```
+用 rsi_reversal.py 回测 BTC/USDT，最近三个月
+```
+
+```
+回测一下这个策略在 ETH/USDT 上的表现，从 2025-01-01 到 2025-03-01，1h 周期，5 万资金
+```
+
+```
+对比一下这个策略在 BTC 和 ETH 上的表现
+```
+
+```
+用事件合约模式回测这个策略，BTC/USDT，最近一个月
+```
+
+也可以使用斜杠命令：
+
+```
+/backtest rsi_reversal.py --symbol BTC/USDT --start 2025-01-01 --end 2025-03-01
+```
+
+Claude 会校验策略、执行回测，并解读结果，包括收益率、胜率、最大回撤和夏普比率等指标。
+
+### 优化迭代
+
+回测完成后，继续用自然语言调整：
+
+```
+胜率太低了，把 RSI 超卖阈值从 30 调到 25 试试
+```
+
+```
+加一个止损逻辑，亏损 2% 自动平仓
+```
+
+```
+换成 4h 周期重新回测看看
 ```
 
 ---
 
-## 快速开始
+## 典型工作流
 
-### 1. 创建策略
-
-```python
-from xqtrader.strategies.base import (
-    BaseStrategy,
-    StrategyContext,
-    StrategyResult,
-)
-
-class MyStrategy(BaseStrategy):
-    def __init__(self):
-        super().__init__(name="my_strategy", version="1.0.0")
-
-    def execute(self, context: StrategyContext) -> StrategyResult:
-        close_prices = context.market_data.get("close", [])
-        if not close_prices:
-            return StrategyResult(
-                signals=[self.create_signal("HOLD", context.symbol)],
-                indicators={},
-                metadata={},
-                execution_time=0.0,
-                success=True,
-            )
-
-        # 在此实现交易逻辑
-        signal = self.create_signal("LONG", context.symbol, confidence=0.8)
-        return StrategyResult(
-            signals=[signal],
-            indicators={},
-            metadata={},
-            execution_time=0.0,
-            success=True,
-        )
 ```
-
-### 2. 运行回测
-
-```python
-import asyncio
-from datetime import datetime, timedelta, timezone
-from xqtrader.engine.backtest import BacktestConfig, BacktestEngine
-
-async def main():
-    strategy = MyStrategy()
-    engine = BacktestEngine()
-
-    now = datetime.now(timezone.utc)
-    config = BacktestConfig(
-        symbol="BTC/USDT",
-        interval="1h",
-        initial_capital=10000.0,
-        start_time=int((now - timedelta(days=7)).timestamp() * 1000),
-        end_time=int(now.timestamp() * 1000),
-    )
-
-    async for event in engine.run(strategy, config):
-        if event.event_type == "trade":
-            print(f"交易: {event.data}")
-        elif event.event_type == "complete":
-            print(f"最终余额: {event.data.get('final_balance')}")
-
-asyncio.run(main())
+1. 描述策略想法          →  Claude 生成策略文件
+2. 检查生成的策略代码     →  确认或提出修改
+3. 说「回测一下」         →  Claude 执行回测并解读结果
+4. 根据结果提出调整       →  迭代优化
 ```
 
 ---
 
-## 信号约定
+## 信号类型
 
 | 合约类型 | 信号 |
 |---------|------|
 | 永续/期货 | `LONG`, `SHORT`, `CLOSE_LONG`, `CLOSE_SHORT`, `CLOSE` |
 | 事件合约 | `UP`, `DOWN`, `HOLD` |
 
-> 事件合约交易器兼容 `LONG`/`SHORT`/`BUY`/`SELL` 并自动映射到 `UP`/`DOWN`。
+---
+
+## 功能特性
+
+- **自然语言交互**：通过 Claude Code 用对话方式创建和测试策略
+- **60+ 技术指标**：RSI、MACD、布林带、ATR、KDJ 等
+- **多交易所支持**：通过 CCXT 支持 100+ 交易所
+- **合约交易**：永续合约双向持仓模式
+- **风控系统**：分级风控（日亏损 3.5%/5%，最大回撤 10%/15%）
 
 ---
 
-## 架构
+## 文档
 
-```
-xqtrader/
-├── strategies/     # 策略系统 - BaseStrategy 基类和动态加载器
-├── engine/         # 执行引擎 - 回测引擎 / 实时引擎
-├── accounts/       # 账户管理 - 模拟账户 / 合约模拟账户
-├── traders/        # 交易器 - 事件交易器 / 合约交易器
-├── data/           # 数据服务 - 数据中心 + CCXT 适配器
-│   └── adapters/   # 交易所适配器 - CCXTAdapter / BinanceAdapter
-├── indicators/     # 技术指标 - 基于 talipp 的 60+ 指标
-├── risk/           # 风控系统 - 分级风控管理器
-├── reports/        # 报告生成 - 回测报告 / 交易记录
-└── config/         # 配置管理
-```
-
-### 数据流
-
-```
-市场数据 (OHLCV) → 指标引擎 → 策略上下文 → 策略执行
-     ↓                                        ↓
-DataCenterService                      StrategyResult
-                                              ↓
-账户更新 ← 交易执行 ← 风控检查 ← 交易信号
-     ↓
-回测报告
-```
-
----
-
-## 示例
-
-查看 [`examples/`](examples/) 目录获取完整示例：
-
-- **MACD 策略**: `examples/macd_strategy/`
-  - `macd_strategy.py` - 策略实现
-  - `run_backtest_futures.py` - 合约回测
-  - `run_backtest_events.py` - 事件合约回测
-
----
-
-## 开发
-
-```bash
-# 运行所有测试
-uv run pytest
-
-# 运行特定测试文件
-uv run pytest tests/test_data_center.py -v
-
-# 运行特定测试类
-uv run pytest tests/test_data_center.py::TestLRUCache -v
-
-# 运行示例
-uv run python examples/macd_strategy/run_backtest_futures.py
-```
-
----
-
-## 风控规则
-
-| 规则 | 警告 | 强平 |
-|-----|------|-----|
-| 日亏损 | 3.5% | 5% |
-| 最大回撤 | 10% | 15% |
-
----
-
-## 路线图
-
-- [x] **MVP v0**: 单标的回测闭环
-- [ ] **MVP v1**: 实时纸交易
-- [ ] **MVP v2**: 资金费率优化
-- [ ] **MVP v3**: 多资产组合
-- [ ] **MVP v4**: 实盘接口
-
-详见 [`docs/trading_system_roadmap.md`](docs/trading_system_roadmap.md)。
-
----
-
-## 依赖
-
-| 包 | 用途 |
-|---|------|
-| [ccxt](https://github.com/ccxt/ccxt) | 交易所连接 |
-| [talipp](https://github.com/nardew/talipp) | 技术指标 |
-| [numpy](https://numpy.org/) | 数值计算 |
-| [pydantic](https://pydantic.dev/) | 数据验证 |
-| [httpx](https://www.python-httpx.org/) | 异步 HTTP 客户端 |
+- [CLI 使用指南](docs/cli_guide.md) — 命令行参考
+- [开发指南](docs/development_guide.md) — 架构与开发者文档
 
 ---
 
 ## 许可证
 
 MIT License - 详见 [LICENSE](LICENSE)。
-
----
-
-## 贡献
-
-欢迎贡献代码！请阅读 [AGENTS.md](AGENTS.md) 了解编码规范。
